@@ -11,16 +11,22 @@ import { insertUserInDb, getUserWithCredentials } from '../data/func-users'
 import { getSession } from '../utils/authInfo'
 
 const UserSignUpSchema = z.object({
-  userName: z.string().min(1, { message: 'This field is required' }),
+  userName: z.string().min(1, { message: 'Please provide a username' }),
   email: z
     .string()
-    .min(1, { message: 'This field is required' })
+    .min(1, { message: 'Please provide an email' })
     .email({ message: 'Must be a valid email address' }),
-  password: z.string().min(1, { message: 'This field is required' })
+  password: z.string().min(1, { message: 'Please provide a password' })
   // role: z.enum(['admin', 'public'])
 })
 
-const UserLogInSchema = UserSignUpSchema.omit({ userName: true })
+const UserSignInSchema = UserSignUpSchema.omit({ userName: true })
+
+export type SignInFormState = {
+  status: 'UNSET' | 'SUCCESS' | 'ERROR'
+  message: string
+  errors: Record<string, string[] | string | undefined>
+}
 
 export const signUp = async (state: unknown, formData: FormData) => {
   const parsedData = UserSignUpSchema.safeParse({
@@ -70,15 +76,17 @@ export const signUp = async (state: unknown, formData: FormData) => {
   return redirect('/login')
 }
 
-export const logIn = async (state: unknown, formData: FormData) => {
-  const parsedData = UserLogInSchema.safeParse({
+export const signIn = async (state: SignInFormState, formData: FormData) => {
+  const parsedData = UserSignInSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password')
   })
 
   if (!parsedData.success) {
     return {
-      message: 'Error. Invalid fields'
+      status: 'ERROR' as const,
+      message: 'Invalid fields',
+      errors: parsedData.error.flatten().fieldErrors
     }
   }
 
@@ -89,8 +97,9 @@ export const logIn = async (state: unknown, formData: FormData) => {
 
   if (response?.error) {
     return {
-      message,
-      error
+      status: 'ERROR' as const,
+      message: message!,
+      errors: { dbError: error! }
     }
   }
 

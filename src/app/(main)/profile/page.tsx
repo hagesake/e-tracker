@@ -1,6 +1,7 @@
 import { validateRequest } from '@/lib/utils/authInfo'
 
 import Link from 'next/link'
+import LogOutButton from '@/components/ui/LogOutButton'
 
 const ProfilePage = async () => {
   const { user } = await validateRequest()
@@ -8,7 +9,7 @@ const ProfilePage = async () => {
   if (!user) {
     return (
       <>
-        <main className="h-screen p-4 pt-20">
+        <div className="h-screen p-4 pt-20">
           <h1>You are not logged in!</h1>
           <p>Please log in to see your profile info</p>
           <Link
@@ -17,16 +18,17 @@ const ProfilePage = async () => {
           >
             Go to login
           </Link>
-        </main>
+        </div>
       </>
     )
   }
 
   return (
     <>
-      <main className="h-screen p-4 pt-20">
+      <div className="h-screen p-4 pt-20">
         <h1>ProfilePage</h1>
-      </main>
+        <LogOutButton />
+      </div>
     </>
   )
 }

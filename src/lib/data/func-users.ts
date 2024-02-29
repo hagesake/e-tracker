@@ -60,7 +60,7 @@ export const getUserWithCredentials = async (data: {
 
     if (retrievedPassword.length === 0) {
       return {
-        message: 'Error getting user from DB',
+        message: 'Error getting user data',
         error: `User doesn't exist`,
         data: null
       }
@@ -72,7 +72,7 @@ export const getUserWithCredentials = async (data: {
 
     if (!isCorrectPassword) {
       return {
-        message: 'Error getting user from DB',
+        message: 'Error getting user data',
         error: 'Wrong credentials',
         data: null
       }
@@ -98,7 +98,7 @@ export const getUserWithCredentials = async (data: {
   } catch (error) {
     console.log('Error getting user from DB', error)
     return {
-      message: 'Error getting user from DB',
+      message: 'Error getting user data',
       error: 'Something went wrong'
     }
   }

@@ -14,7 +14,7 @@ const OperationsPage = async () => {
   if (!user) {
     return (
       <>
-        <main className="h-screen p-4 pt-20">
+        <div className="h-screen p-4 pt-20">
           <h1>You are not logged in!</h1>
           <p>Please log in to see your operations</p>
           <Link
@@ -23,14 +23,14 @@ const OperationsPage = async () => {
           >
             Go to login
           </Link>
-        </main>
+        </div>
       </>
     )
   }
 
   return (
     <>
-      <main className="h-screen p-4 pt-16">
+      <div className="h-screen p-4 pt-16">
         <h1 className="font-Quicksand text-3xl font-black text-eerie_black dark:text-timberwolf">
           Your operations
         </h1>
@@ -54,7 +54,7 @@ const OperationsPage = async () => {
             })}
           </ul>
         </div>
-      </main>
+      </div>
     </>
   )
 }

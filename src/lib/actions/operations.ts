@@ -24,11 +24,14 @@ const OperationSchema = z.object({
   op_type: z.enum(['debit', 'credit'] as const)
 })
 
-export type CreateFormState = z.infer<typeof OperationSchema>
+export type CreateFormState = {
+  status: 'UNSET' | 'SUCCESS' | 'ERROR'
+  message: string
+  errors: Record<string, string[] | undefined>
+  resetKey: number
+}
 
-export const create = async (state: any, formData: FormData) => {
-  console.log('executing CREATE_OPERATION action...')
-
+export const create = async (state: CreateFormState, formData: FormData) => {
   const parsedData = OperationSchema.safeParse({
     name: formData.get('name'),
     ammount: formData.get('ammount'),
@@ -37,17 +40,18 @@ export const create = async (state: any, formData: FormData) => {
   })
 
   if (!parsedData.success) {
-    console.log('wrong data!')
     return {
-      errors: true,
-      resetKey: undefined
+      status: 'ERROR' as const,
+      message: 'Invalid fields',
+      errors: parsedData.error.flatten().fieldErrors,
+      resetKey: Date.now()
     }
   }
 
   const { name, ammount, currency, op_type } = parsedData.data
-
   const userId = (await validateRequest()).user?.id!
   console.log({ name, ammount, currency, op_type, userId })
+
   const response = await db
     .insert(operations)
     .values({
@@ -59,12 +63,17 @@ export const create = async (state: any, formData: FormData) => {
     })
     .returning({ insertedId: operations.id, userId: operations.user_id })
 
+  // await new Promise(resolve => setTimeout(resolve, 1000))
+
   if (response[0].insertedId) {
     revalidatePath('/operations')
     // redirect('/operations')
-    return {
-      errors: false,
-      resetKey: response[0].insertedId
-    }
+  }
+
+  return {
+    status: 'SUCCESS' as const,
+    message: 'Operation created succesfully!',
+    errors: {},
+    resetKey: Date.now()
   }
 }
