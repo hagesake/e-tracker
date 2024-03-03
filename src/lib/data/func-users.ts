@@ -7,8 +7,13 @@ import { Argon2id } from 'oslo/password'
 import { db } from '@/db'
 import { users } from '@/db/schemas/users'
 
+export type SignUpResponse = {
+  message: string
+  error?: string
+}
+
 export type LogInResponse = {
-  message?: string
+  message: string
   error?: string
   data?: {
     id: string
@@ -18,7 +23,9 @@ export type LogInResponse = {
   } | null
 }
 
-export const insertUserInDb = async (data: InsertUser) => {
+export const insertUserInDb = async (
+  data: InsertUser
+): Promise<SignUpResponse | undefined> => {
   try {
     const response = await db.insert(users).values(data).returning({
       id: users.id,
@@ -28,7 +35,7 @@ export const insertUserInDb = async (data: InsertUser) => {
     if (response) {
       return {
         message: 'Success inserting user in DB',
-        error: null
+        error: undefined
       }
     }
   } catch (error) {
@@ -39,6 +46,12 @@ export const insertUserInDb = async (data: InsertUser) => {
       return {
         message: 'Error inserting user in DB',
         error: message
+      }
+    } else {
+      console.log('Error: ', error)
+      return {
+        message: 'Error inserting user in DB',
+        error: 'Something went wrong'
       }
     }
   }

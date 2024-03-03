@@ -1,10 +1,13 @@
 import { sql } from 'drizzle-orm'
-import { integer, real, text, sqliteTable } from 'drizzle-orm/sqlite-core'
+import { real, text, sqliteTable } from 'drizzle-orm/sqlite-core'
 
 import { users } from './users'
 
 export const operations = sqliteTable('operations', {
-  id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  // id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  id: text('id')
+    .$defaultFn(() => crypto.randomUUID())
+    .primaryKey(),
   user_id: text('user_id').references(() => users.id),
   name: text('name').notNull(),
   description: text('description'),

@@ -5,11 +5,7 @@ const AuthLayout = ({
 }>) => {
   return (
     <>
-      <main
-      // className={` bg-timberwolf dark:bg-eerie_black`}
-      >
-        {children}
-      </main>
+      <main>{children}</main>
     </>
   )
 }

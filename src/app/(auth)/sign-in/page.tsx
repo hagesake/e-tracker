@@ -30,7 +30,7 @@ const LoginPage = async () => {
         <div className="mx-auto w-full max-w-lg rounded-[20px] bg-gradient-to-br from-base/20 to-cadet_gray/20 p-8 dark:bg-gradient-to-br dark:from-eerie_black/20 dark:to-cadet_gray-400/20">
           <div>
             <h2 className="font-Quicksand text-2xl font-black tracking-wider text-eerie_black dark:text-timberwolf">
-              Welcome!
+              Hello there!
             </h2>
             <p className="font-Quicksand text-lg text-cadet_gray-200 dark:text-timberwolf-400">
               Please enter your credentials
