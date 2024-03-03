@@ -20,15 +20,20 @@ const SignInForm = () => {
 
   return (
     <>
-      <form action={formAction} className="@container mt-8 flex flex-col gap-8">
+      <form action={formAction} className="mt-8 flex flex-col gap-8 @container">
         <div className="space-y-2">
-          <div className="flex flex-col">
+          <div className="relative flex flex-col">
             <label
               htmlFor="email"
               className="ml-2 font-Quicksand text-eerie_black dark:text-timberwolf"
             >
               Email
             </label>
+
+            {formState.errors['email']?.[0] && (
+              <TbAlertSquareRounded className="absolute bottom-6 right-2 h-6 w-6 stroke-red-600 dark:stroke-red-800" />
+            )}
+
             <input
               type="text"
               id="email"
@@ -43,13 +48,18 @@ const SignInForm = () => {
             </p>
           </div>
 
-          <div className="flex flex-col">
+          <div className="relative flex flex-col">
             <label
               htmlFor="password"
               className="ml-2 font-Quicksand text-eerie_black dark:text-timberwolf"
             >
               Password
             </label>
+
+            {formState.errors['password']?.[0] && (
+              <TbAlertSquareRounded className="absolute bottom-6 right-2 h-6 w-6 stroke-red-600 dark:stroke-red-800" />
+            )}
+
             <input
               type="password"
               id="password"
@@ -75,10 +85,10 @@ const SignInForm = () => {
           )}
         </div>
 
-        <div className="@[380px]:flex-row-reverse @[380px]:justify-between flex flex-col gap-4">
+        <div className="flex flex-col gap-4 @[380px]:flex-row-reverse @[380px]:justify-between">
           <FormControls />
 
-          <div className="@[380px]:block @[380px]:m-0 mx-auto flex items-center gap-1">
+          <div className="mx-auto flex items-center gap-1 @[380px]:m-0 @[380px]:block">
             <p className="font-Quicksand text-xs font-light text-eerie_black-600 dark:text-timberwolf-300">
               {"Don't have an account yet?"}
             </p>
